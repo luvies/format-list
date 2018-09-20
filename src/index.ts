@@ -12,7 +12,7 @@ export interface Options {
   tagStr?: string;
   /**
    * The number to start with for the $n tags.
-   * @default 1 // i.e. $1
+   * @default 0 // i.e. $0
    */
   tagStart?: number;
   /**
@@ -24,7 +24,7 @@ export interface Options {
 
 /**
  * Formats a list of values into a given string using the `$n` tags.
- * By default, index 0 will replace the `$1` tag, and it will go up
+ * By default, index 0 will replace the `$0` tag, and it will go up
  * by 1 from there.
  *
  * @param str The string to format.
@@ -34,7 +34,7 @@ export interface Options {
  */
 export default function formatList(str: string, lst: string[], opts: Options = {}): string {
   opts.tagStr = typeof opts.tagStr === 'undefined' ? '$' : opts.tagStr;
-  opts.tagStart = typeof opts.tagStart === 'undefined' ? 1 : opts.tagStart;
+  opts.tagStart = typeof opts.tagStart === 'undefined' ? 0 : opts.tagStart;
   opts.indexStart = typeof opts.indexStart === 'undefined' ? 0 : opts.indexStart;
 
   const rpl: Record<string, string> = {};

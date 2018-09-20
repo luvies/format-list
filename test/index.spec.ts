@@ -12,15 +12,15 @@ describe('formatList', function() {
   it('should not change a string if the tags don\'t match up', function() {
     expect(formatList('foo $2 bar', ['faz'])).to.be.equal('foo $2 bar');
     expect(formatList('foo $1 bar', [])).to.be.equal('foo $1 bar');
-    expect(formatList('foo $2 $3 bar', ['faz', 'baz'])).to.be.equal('foo baz $3 bar');
+    expect(formatList('foo $1 $3 bar', ['faz', 'baz'])).to.be.equal('foo baz $3 bar');
     expect(formatList('foo $5 bar', ['faz'])).to.be.equal('foo $5 bar');
   });
 
   it('should replace all tags that have a relevant list index', function() {
-    expect(formatList('foo $1 baz', ['bar'])).to.be.equal('foo bar baz');
-    expect(formatList('foo $2 baz', ['bar', 'faz'])).to.be.equal('foo faz baz');
-    expect(formatList('foo $1 baz $2', ['bar', 'faz'])).to.be.equal('foo bar baz faz');
-    expect(formatList('f$1o $2 b$3z', ['o', 'bar', 'a'])).to.be.equal('foo bar baz');
+    expect(formatList('foo $0 baz', ['bar'])).to.be.equal('foo bar baz');
+    expect(formatList('foo $1 baz', ['bar', 'faz'])).to.be.equal('foo faz baz');
+    expect(formatList('foo $0 baz $1', ['bar', 'faz'])).to.be.equal('foo bar baz faz');
+    expect(formatList('f$0o $1 b$2z', ['o', 'bar', 'a'])).to.be.equal('foo bar baz');
   });
 
   it('should properly handle index offset options', function() {
@@ -31,7 +31,7 @@ describe('formatList', function() {
   });
 
   it('should properly handle tag offset options', function() {
-    expect(formatList('foo $0 baz', ['bar'], { tagStart: 0 })).to.be.equal('foo bar baz');
+    expect(formatList('foo $1 baz', ['bar'], { tagStart: 1 })).to.be.equal('foo bar baz');
     expect(formatList('foo $2 baz', ['bar'], { tagStart: 2 })).to.be.equal('foo bar baz');
     expect(formatList('foo $3 baz', ['bar'], { tagStart: 3 })).to.be.equal('foo bar baz');
     expect(formatList('foo $4 baz', ['bar'], { tagStart: 4 })).to.be.equal('foo bar baz');
@@ -62,18 +62,18 @@ describe('formatList', function() {
   });
 
   it('should handle custom tag prefixes', function() {
-    expect(formatList('foo &1 baz', ['bar'], { tagStr: '&' })).to.be.equal('foo bar baz');
-    expect(formatList('foo $1 baz', ['bar'], { tagStr: '&' })).to.be.equal('foo $1 baz');
-    expect(formatList('foo ^1 baz', ['bar'], { tagStr: '^' })).to.be.equal('foo bar baz');
-    expect(formatList('foo £1 baz', ['bar'], { tagStr: '£' })).to.be.equal('foo bar baz');
+    expect(formatList('foo &0 baz', ['bar'], { tagStr: '&' })).to.be.equal('foo bar baz');
+    expect(formatList('foo $0 baz', ['bar'], { tagStr: '&' })).to.be.equal('foo $0 baz');
+    expect(formatList('foo ^0 baz', ['bar'], { tagStr: '^' })).to.be.equal('foo bar baz');
+    expect(formatList('foo £0 baz', ['bar'], { tagStr: '£' })).to.be.equal('foo bar baz');
   });
 
   it('should work for regex results', function() {
     let match: RegExpMatchArray = 'foo bar baz'.match(/(b..) (b..)/)!
-    expect(formatList('group 1: $1, group 2: $2', match, { indexStart: 1 }))
+    expect(formatList('group 1: $1, group 2: $2', match))
       .to.be.equal('group 1: bar, group 2: baz')
     match = 'foo bar baz'.match(/(b..)+/g)!
-    expect(formatList('group 1: $1, group 2: $2', match))
+    expect(formatList('group 1: $0, group 2: $1', match))
       .to.be.equal('group 1: bar, group 2: baz')
   });
 });
