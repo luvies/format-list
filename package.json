@@ -1,6 +1,6 @@
 {
   "name": "format-list",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Formats a list strings into a string containing multiple `$n` tags",
   "main": "lib/index.js",
   "repository": "luvies/format-list",
